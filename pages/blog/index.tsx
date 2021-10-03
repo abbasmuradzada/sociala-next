@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TestLayout from "../../components/layouts/TestLayout";
+import TestLayout from "../../components/layouts/MainLayout";
 
 interface IProps {}
 

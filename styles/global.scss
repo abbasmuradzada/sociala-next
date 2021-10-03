@@ -108,9 +108,6 @@
   }
 }
 .feed-body {
-  visibility: hidden;
-  overflow: hidden;
-  height: 0;
 }
 
 .loaded .feed-body {
@@ -17142,7 +17139,7 @@ select.sort {
 
 // Login Page
 .bg-image-cover-login {
-  background-image: url(../public/images/login-bg.jpg) !important;
+  background-image: url(../public/login-bg.jpg) !important;
   background-size: cover;
 }
 
