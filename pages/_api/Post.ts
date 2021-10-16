@@ -10,8 +10,8 @@ export function PostService() {
   const getAllPosts = () => HTTP.client().get("/post");
   const getOwnPost = () => HTTP.client().get("/post/myProfile");
   const getPostOfSubs = () => HTTP.client().get("/post/postsOfSubs");
-  const createVideoPost = (data) => HTTP.client().post("post/video", data);
-  const updatePost = (data) => HTTP.client().post("post/update", data);
+  const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
+  const updatePost = (data: any) => HTTP.client().post("post/update", data);
 
   return {
     deletePost,
