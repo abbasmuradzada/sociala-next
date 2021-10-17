@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from 'next/link';
 import { ReactNode } from "react";
 
 interface IProps {
@@ -390,12 +391,14 @@ const MainLayout = ({ children }: IProps) => (
               </div>
               <ul className="mb-1 top-content">
                 <li className="logo d-none d-xl-block d-lg-block" />
-                <li>
-                  <a href="default.html" className="nav-content-bttn open-font">
-                    <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
-                    <span>Newsfeed</span>
-                  </a>
-                </li>
+                <Link href="feed">
+                  <li>
+                    <a href="default.html" className="nav-content-bttn open-font">
+                      <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
+                      <span>Newsfeed</span>
+                    </a>
+                  </li>
+                </Link>
                 <li>
                   <a
                     href="default-storie.html"
@@ -431,18 +434,20 @@ const MainLayout = ({ children }: IProps) => (
               <div className="nav-caption fw-600 font-xssss text-grey-500">
                 <span /> Account
               </div>
-              <ul className="mb-1">
-                <li className="logo d-none d-xl-block d-lg-block" />
-                <li>
-                  <a
-                    href="default-settings.html"
-                    className="nav-content-bttn open-font h-auto pt-2 pb-2"
-                  >
-                    <i className="font-sm feather-settings me-3 text-grey-500" />
-                    <span>Settings</span>
-                  </a>
-                </li>
-              </ul>
+              <Link href="/settings">
+                <ul className="mb-1">
+                  <li className="logo d-none d-xl-block d-lg-block" />
+                  <li>
+                    <a
+                      href="default-settings.html"
+                      className="nav-content-bttn open-font h-auto pt-2 pb-2"
+                    >
+                      <i className="font-sm feather-settings me-3 text-grey-500" />
+                      <span>Settings</span>
+                    </a>
+                  </li>
+                </ul>
+              </Link>
             </div>
           </div>
         </div>
