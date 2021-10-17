@@ -1,13 +1,27 @@
+import { useEffect, useState } from "react";
+import { UserService } from "../_api/User";
+
 const Profile = () => {
+
+    const [user, setUser] = useState()
+
+    useEffect(() => {
+        UserService().getUserIdByUsername('elvin1').then((idRes) => {
+            UserService().getSingleUser(idRes.data.id).then((userRes) => {
+                setUser(userRes.data.user)
+                // console.log(userRes);
+            })
+        })
+    }, [])
     return (
         <div className="middle-sidebar-left">
             <div className="row">
                 <div className="col-lg-12">
                     <div className="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
-                        <div className="card-body h250 p-0 rounded-xxl overflow-hidden m-3"><img src="../images/u-bg.jpg" alt="image" /></div>
+                        <div className="card-body h250 p-0 rounded-xxl overflow-hidden m-3"><img src={user?.backgroundPicture} alt="image" /></div>
                         <div className="card-body p-0 position-relative">
-                            <figure className="avatar position-absolute w100 z-index-1" ><img src="images/user-12.png" alt="image" className="float-right p-1 bg-white rounded-circle w-100" /></figure>
-                            <h4 className="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">Mohannad Zitoun <span className="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">support@gmail.com</span></h4>
+                            <figure className="avatar position-absolute w100 z-index-1" ><img src={user?.profilePicture} alt="image" className="float-right p-1 bg-white rounded-circle w-100" /></figure>
+                            <h4 className="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">{user?.userName} <span className="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">{user?.email}</span></h4>
                             <div className="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
                                 <a href="#" className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Add Friend</a>
                                 <a href="#" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i className="feather-mail font-md"></i></a>
@@ -106,28 +120,6 @@ const Profile = () => {
                             <a href="#" className="p-2 lh-28 w-100 d-block bg-grey text-grey-800 text-center font-xssss fw-700 rounded-xl"><i className="feather-external-link font-xss me-2"></i> More</a>
                         </div>
                     </div>
-
-                    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
-                        <div className="card-body d-flex align-items-center  p-4">
-                            <h4 className="fw-700 mb-0 font-xssss text-grey-900">Event</h4>
-                            <a href="#" className="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div className="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                            <div className="bg-success me-2 p-3 rounded-xxl"><h4 className="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span className="ls-1 d-block font-xsss text-white fw-600">FEB</span>22</h4></div>
-                            <h4 className="fw-700 text-grey-900 font-xssss mt-2">Meeting with clients <span className="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div className="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                            <div className="bg-warning me-2 p-3 rounded-xxl"><h4 className="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span className="ls-1 d-block font-xsss text-white fw-600">APR</span>30</h4></div>
-                            <h4 className="fw-700 text-grey-900 font-xssss mt-2">Developer Programe <span className="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div className="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                            <div className="bg-primary me-2 p-3 rounded-xxl"><h4 className="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span className="ls-1 d-block font-xsss text-white fw-600">APR</span>23</h4></div>
-                            <h4 className="fw-700 text-grey-900 font-xssss mt-2">Aniversary Event <span className="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span> </h4>
-                        </div>
-
-                    </div>
                 </div>
                 <div className="col-xl-8 col-xxl-9 col-lg-8">
 
@@ -137,7 +129,7 @@ const Profile = () => {
                             <a href="#" className=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>Create Post</a>
                         </div>
                         <div className="card-body p-0 mt-3 position-relative">
-                            <figure className="avatar position-absolute ms-2 mt-1 top-5"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w30" /></figure>
+                            <figure className="avatar position-absolute ms-2 mt-1 top-5"><img src={user?.profilePicture} alt="image" className="shadow-sm rounded-circle w30" /></figure>
                             <textarea name="message" className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" placeholder="What's on your mind?"></textarea>
                         </div>
                         <div className="card-body d-flex p-0 mt-0">
