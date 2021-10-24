@@ -19,7 +19,7 @@ export const HTTP = (() => {
     },
     client() {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTU5ODdlMzQyNDlkOTI0OGMxZTExNTYiLCJyb2xlIjoidXNlciIsImlhdCI6MTYzMzg5NTYyMywiZXhwIjoxNjM0NzU5NjIzfQ.aG_KhqmhmkbcBoxkeE16TTPmHvG5SAeq1y5r6yj_9SE";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTZjMGU2MjMyODdhYTFmYjBjZWY0ZTciLCJyb2xlIjoidXNlciIsImlhdCI6MTYzNTA2MDU1MSwiZXhwIjoxNjM1OTI0NTUxfQ.v7F6n7zvNFVOzDrwCSym4fAN94zRxpXPDMzBKyVwwLU";
 
       if (token) {
         $client.defaults.headers.common.Authorization = `Bearer ${token}`;

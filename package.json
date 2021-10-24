@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@mui/icons-material": "^5.0.0",
     "@reduxjs/toolkit": "^1.6.1",
     "ahooks": "^2.10.9",

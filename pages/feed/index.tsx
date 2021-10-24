@@ -9,11 +9,13 @@ import { PostService } from "../_api/Post";
 
 const Feed: NextPage = ({ children }) => {
     const [posts, setPosts] = useState([]);
+    const [commentCount, setCommentCount] = useState();
+    const [liked, setLiked] = useState(false);
     const [activeCommentSections, setActiveCommentSections] = useState<{ id: string, active: boolean }[]>([])
 
 
     const commentSectionHandler = ({ _id: id }) => {
-        setActiveCommentSections([...activeCommentSections, {
+        setActiveCommentSections((prevState) => [...prevState, {
             id,
             active: false
         }])
@@ -34,9 +36,14 @@ const Feed: NextPage = ({ children }) => {
     }, [posts])
 
     const toggleCommentSection = (post) => {
-        // state.activeCommentSections.find((postForComment: any) => postForComment.id === post._id).active = !state.activeCommentSections.find((postForComment: any) => postForComment.id === post._id)?.active
-        console.log(test)
-
+        setActiveCommentSections((prevState) => prevState.map(postForComment => {
+            if (postForComment.id === post._id)
+                return ({
+                    id: postForComment.id,
+                    active: !postForComment.active
+                })
+            return postForComment;
+        }))
     }
 
 
@@ -66,13 +73,17 @@ const Feed: NextPage = ({ children }) => {
                         {post.type === 'photo' && <img src={post.postContent} alt='post content' />}
                         <div className="card-body d-flex p-0">
                             {post?.likesFrom.length} Like
-                            <a className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss" onClick={() => toggleCommentSection(post)}><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" /><span className="d-none-xss">{post?.commentCount}
-                                {post.commentCount > 1 ? 'Comments' : 'Comment'}
+                            <a className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss" onClick={() => toggleCommentSection(post)}><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" /><span className="d-none-xss">{commentCount ?? post.commentCount}
+                                {(commentCount ?? post.commentCount) > 1 ? ' Comments' : ' Comment'}
                             </span></a>
-                            {
-                                activeCommentSections.find((postForComment: any) => postForComment.id === post._id)?.active && <CommentSection />
-                            }
+
                         </div>
+                        <>
+                            {
+                                activeCommentSections.find(comment => comment.id === post._id)?.active &&
+                                <CommentSection post={post} setCommentCount={setCommentCount} />
+                            }
+                        </>
                     </div>
                 )}
             </>
