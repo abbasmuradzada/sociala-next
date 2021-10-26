@@ -1,3 +1,4 @@
+import { useQuery } from 'react-query';
 import { HTTP } from "./axiosconfig";
 
 export function SubscriptionService() {
@@ -11,8 +12,10 @@ export function SubscriptionService() {
   // const getPostOfSubs = () => HTTP.client().get("/post/postsOfSubs");
   // const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
   const updatePost = (data: any) => HTTP.client().post("post/update", data);
+  const useGetFollowers = (id: any) => useQuery(['getFollowers', id], () => getFollowers(id))
+
 
   return {
-    getFollowers
+    useGetFollowers
   };
 }

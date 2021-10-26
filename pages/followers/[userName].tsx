@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from 'react-query';
 import { SubscriptionService } from "../_api/Subscription";
 import { UserService } from "../_api/User";
 
@@ -7,23 +8,27 @@ const Followers = () => {
   const router = useRouter()
   const [followers, setFollowers] = useState<any[] | null>(null)
 
-  // @todo-important
-  if (router?.query?.userName) {
-    UserService().getUserIdByUsername(router?.query?.userName).then((idRes) => {
-      SubscriptionService().getFollowers(idRes.data.id).then(res => {
-        setFollowers(res.data.followers)
-        console.log(res.data.followers);
-      }).catch(err => {
-        console.log(err);
-      })
-    })
-  }
+  const userService = UserService()
+  const subscriptionService = SubscriptionService()
+  const queryClient = useQueryClient();
+
+  const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
+
+  const { data, isLoading: followersLoading } = subscriptionService.useGetFollowers(getId?.data.id)
+
+  useEffect(() => {
+    queryClient.invalidateQueries(['getFollowers', getId?.data.id]);
+  }, [isLoading])
+
+  useEffect(() => {
+    setFollowers(data?.data.followers);
+  }, [followersLoading])
 
   if (followers === null) {
     return <h1>loading...</h1>
   }
 
-  if (followers.length === 0) {
+  if (followers?.length === 0) {
     return <h1>there is no any follower</h1>
   }
 
