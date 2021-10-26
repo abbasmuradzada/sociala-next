@@ -11,7 +11,6 @@ export function SubscriptionService() {
   // const getOwnPost = () => HTTP.client().get("/post/myProfile");
   // const getPostOfSubs = () => HTTP.client().get("/post/postsOfSubs");
   // const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
-  const updatePost = (data: any) => HTTP.client().post("post/update", data);
   const useGetFollowers = (id: any) => useQuery(['getFollowers', id], () => getFollowers(id))
 
 
