@@ -1,3 +1,4 @@
+import { useQuery } from 'react-query';
 import { HTTP } from "./axiosconfig";
 
 export function UserService() {
@@ -5,7 +6,6 @@ export function UserService() {
     userName: username
   });
   const getSingleUser = (id: string) => HTTP.client().get(`/user/${id}`);
-  const deletePost = (id: string) => HTTP.client().delete(`/post/${id}`);
   const getPostOfAnyUser = (id: string) =>
     HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   const likeOrUnlike = (id: string) =>
@@ -16,8 +16,13 @@ export function UserService() {
   const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
   const updatePost = (data: any) => HTTP.client().post("post/update", data);
 
+
+  const useGetSingleUser = (id: any) => useQuery(['getSingleUser', id], () => getSingleUser(id))
+  const useGetUserIdByUsername = (username: string) => useQuery(['/user/getUserName', username], () => getUserIdByUsername(username))
+
   return {
-    getUserIdByUsername,
-    getSingleUser
+    // getUserIdByUsername,
+    useGetSingleUser,
+    useGetUserIdByUsername
   };
 }
