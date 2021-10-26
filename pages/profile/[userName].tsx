@@ -1,31 +1,32 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from 'react-query';
 import { UserService } from "../_api/User";
 
 const Profile = () => {
   const router = useRouter()
+  const [userId, setUserId] = useState()
   const [user, setUser] = useState()
 
-  // @todo-important
-  if (router?.query?.userName) {
-    UserService().getUserIdByUsername(router?.query?.userName).then((idRes) => {
-      UserService().getSingleUser(idRes.data.id).then((userRes) => {
-        setUser(userRes.data.user)
-      })
-    })
-  }
+  const userService = UserService()
+  const queryClient = useQueryClient();
+
+  const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
+
+  const { data, isLoading: userLoading } = userService.useGetSingleUser(getId?.data.id)
+
+  useEffect(() => {
+    queryClient.invalidateQueries(['getSingleUser', getId?.data.id]);
+  }, [isLoading])
+
+  useEffect(() => {
+    setUser(data?.data.user)
+  }, [userLoading])
 
   if (!user) {
     return <h1>loading...</h1>
   }
 
-  // useEffect(() => {
-  //   UserService().getUserIdByUsername(router?.query?.userName).then((idRes) => {
-  //     UserService().getSingleUser(idRes.data.id).then((userRes) => {
-  //       setUser(userRes.data.user)
-  //     })
-  //   })
-  // }, [])
   return (
     <div className="middle-sidebar-left">
       <div className="row">
