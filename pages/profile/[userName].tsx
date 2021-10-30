@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from 'react-query';
-import { AuthContextType, useAuth } from "../../context";
 import { UserService } from "../_api/User";
 
 const Profile = () => {
@@ -15,10 +15,6 @@ const Profile = () => {
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
   const { data, isLoading: userLoading } = userService.useGetSingleUser(getId?.data.id)
-
-
-  const { token } = useAuth() as AuthContextType
-  console.log(token);
 
   useEffect(() => {
     queryClient.invalidateQueries(['getSingleUser', getId?.data.id]);
@@ -80,34 +76,38 @@ const Profile = () => {
           </div>
         </div>
         <div className="col-xl-4 col-xxl-3 col-lg-4 pe-0">
-          <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
-            <div className="card-body p-3 border-0">
-              <div className="row">
-                <div className="col-1" />
-                <div className="col-8 ps-1">
-                  <h4 className="font-xsss d-block fw-700 mt-2 mb-0">
-                    <i
-                      className="profile-statictic-icon feather-users font-md text-black mr-2"
-                    />
-                    <span className="ms-2">{user?.followersCount ?? 0} Followers</span></h4>
+          <Link href={`/followers/${user?.userName}`}>
+            <div className="cursor-pointer card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
+              <div className="card-body p-3 border-0">
+                <div className="row">
+                  <div className="col-1" />
+                  <div className="col-8 ps-1">
+                    <h4 className="font-xsss d-block fw-700 mt-2 mb-0">
+                      <i
+                        className="profile-statictic-icon feather-users font-md text-black mr-2"
+                      />
+                      <span className="ms-2">{user?.followersCount ?? 0} Followers</span></h4>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
-            <div className="card-body p-3 border-0">
-              <div className="row">
-                <div className="col-1" />
-                <div className="col-8 ps-1">
-                  <h4 className="font-xsss d-block fw-700 mt-2 mb-0">
-                    <i
-                      className="profile-statictic-icon feather-user-check font-md text-black mr-2"
-                    />
-                    <span className="ms-2">{user?.followsCount ?? 0} Follow</span></h4>
+          </Link>
+          <Link href={`/following/${user?.userName}`}>
+            <div className="cursor-pointer card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
+              <div className="card-body p-3 border-0">
+                <div className="row">
+                  <div className="col-1" />
+                  <div className="col-8 ps-1">
+                    <h4 className="font-xsss d-block fw-700 mt-2 mb-0">
+                      <i
+                        className="profile-statictic-icon feather-user-check font-md text-black mr-2"
+                      />
+                      <span className="ms-2">{user?.followsCount ?? 0} Follow</span></h4>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
           <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
             <div className="card-body p-3 border-0">
               <div className="row">

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { AuthContextType, useAuth } from "../../context";
 
 
 interface IProps {
@@ -10,6 +11,8 @@ interface IProps {
 
 const MainLayout = ({ children }: IProps) => {
   const queryClient = new QueryClient()
+  const { userName, token } = useAuth() as AuthContextType
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="main-wrapper">
@@ -396,14 +399,14 @@ const MainLayout = ({ children }: IProps) => {
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block" />
                   <Link href="feed">
-                    <li>
+                    <li className='cursor-pointer'>
                       <a href="default.html" className="nav-content-bttn open-font">
                         <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
                         <span>Newsfeed</span>
                       </a>
                     </li>
                   </Link>
-                  <li>
+                  <li className='cursor-pointer'>
                     <a
                       href="default-storie.html"
                       className="nav-content-bttn open-font"
@@ -412,16 +415,18 @@ const MainLayout = ({ children }: IProps) => {
                       <span>Explore Stories</span>
                     </a>
                   </li>
+                  <Link href={`/profile/${userName}`}>
+                    <li className='cursor-pointer'>
+                      <a
+                        href="user-page.html"
+                        className="nav-content-bttn open-font"
+                      >
+                        <i className="feather-user btn-round-md bg-gold-gradiant me-3" />
+                        <span>Author Profile </span>
+                      </a>
+                    </li>
+                  </Link>
 
-                  <li>
-                    <a
-                      href="user-page.html"
-                      className="nav-content-bttn open-font"
-                    >
-                      <i className="feather-user btn-round-md bg-gold-gradiant me-3" />
-                      <span>Author Profile </span>
-                    </a>
-                  </li>
                 </ul>
               </div>
 

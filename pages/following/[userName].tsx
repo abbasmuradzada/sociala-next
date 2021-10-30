@@ -7,7 +7,7 @@ import { UserService } from "../_api/User";
 
 const Followers = () => {
   const router = useRouter()
-  const [followers, setFollowers] = useState<any[] | null>(null)
+  const [followings, setFollowings] = useState<any[] | null>(null)
 
   const userService = UserService()
   const subscriptionService = SubscriptionService()
@@ -15,21 +15,22 @@ const Followers = () => {
 
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
-  const { data, isLoading: followersLoading } = subscriptionService.useGetFollowers(getId?.data.id)
+  const { data, isLoading: followingLoading } = subscriptionService.useGetFollowing(getId?.data.id)
 
   useEffect(() => {
     queryClient.invalidateQueries(['getFollowers', getId?.data.id]);
   }, [isLoading])
 
   useEffect(() => {
-    setFollowers(data?.data.followers);
-  }, [followersLoading])
+    setFollowings(data?.data.follows);
+  }, [followingLoading])
 
-  if (followers === null) {
+
+  if (followings === null) {
     return <h1>loading...</h1>
   }
 
-  if (followers?.length === 0) {
+  if (followings?.length === 0) {
     return <h1>there is no any follower</h1>
   }
 
@@ -49,30 +50,30 @@ const Followers = () => {
 
         <div className="row ps-2 pe-1">
           {
-            followers?.map((follower: any) => (
+            followings?.map((following: any) => (
               <div className="col-md-4 col-sm-6 pe-2 ps-2">
                 <div className="card d-block border-0 shadow-xss rounded-3 overflow-hidden mb-3">
                   <div className="card-body d-block w-100 p-4 text-center">
                     <figure className="avatar ms-auto me-auto mb-0 position-relative w90 z-index-1">
-                      <img src={follower.user_from[0].profilePicture} alt="profile" className="float-right p-1 bg-white rounded-circle w-100" /></figure>
+                      <img src={following.userTo.profilePicture} alt="profile" className="float-right p-1 bg-white rounded-circle w-100" /></figure>
                     <div className="clearfix" />
-                    <h4 className="fw-700 font-xss mt-3 mb-0">{follower.user_from[0].userName}</h4>
-                    <p className="fw-500 font-xssss text-grey-500 mt-0 mb-3">{follower.user_from[0].email}</p>
+                    <h4 className="fw-700 font-xss mt-3 mb-0">{following.userTo.userName}</h4>
+                    <p className="fw-500 font-xssss text-grey-500 mt-0 mb-3">{following.userTo.email}</p>
                     <ul className="d-flex align-items-center justify-content-center mt-1">
                       <li className="m-2">
-                        <h4 className="fw-700 font-sm">{follower.user_from[0].postsCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Post</span>
+                        <h4 className="fw-700 font-sm">{following.userTo.postsCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Post</span>
                         </h4>
                       </li>
                       <li className="m-2">
-                        <h4 className="fw-700 font-sm">{follower.user_from[0].followersCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Follower</span>
+                        <h4 className="fw-700 font-sm">{following.userTo.followersCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Follower</span>
                         </h4>
                       </li>
                       <li className="m-2">
-                        <h4 className="fw-700 font-sm">{follower.user_from[0].followsCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Followings</span>
+                        <h4 className="fw-700 font-sm">{following.userTo.followsCount} <span className="font-xsssss fw-500 mt-1 text-grey-500 d-block">Followings</span>
                         </h4>
                       </li>
                     </ul>
-                    <Link href={`/profile/${follower.user_from[0].userName}`}>
+                    <Link href={`/profile/${following.userTo.userName}`}>
                       <a className="mt-4 p-0 btn p-2 lh-24 w150 ms-1 ls-3 d-inline-block rounded-xl bg-cyan font-xsssss fw-700 ls-lg text-white">SHOW PROFILE</a>
                     </Link>
                   </div>

@@ -22,9 +22,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userName, setUserName] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    console.log('asdfghjkl;');
-
     setToken(localStorage.getItem('token'))
+    setUserName(localStorage.getItem('username'))
+    setUserId(localStorage.getItem('userId'))
+
   }, [])
 
   const saveToken = (newToken: string) => {
