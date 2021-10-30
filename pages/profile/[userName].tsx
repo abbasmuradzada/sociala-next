@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from 'react-query';
+import { AuthContextType, useAuth } from "../../context";
 import { UserService } from "../_api/User";
 
 const Profile = () => {
@@ -14,6 +15,10 @@ const Profile = () => {
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
   const { data, isLoading: userLoading } = userService.useGetSingleUser(getId?.data.id)
+
+
+  const { token } = useAuth() as AuthContextType
+  console.log(token);
 
   useEffect(() => {
     queryClient.invalidateQueries(['getSingleUser', getId?.data.id]);
