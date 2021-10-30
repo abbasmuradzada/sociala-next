@@ -5,6 +5,13 @@ export function AuthService() {
     userName,
     password,
   });
+
+  const register = ({ userName, password, email }: { userName: string, password: string, email: string }) => HTTP.client().post(`/auth/register`, {
+    userName,
+    password,
+    email,
+  });
+
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   // const likeOrUnlike = (id: string) =>
@@ -17,6 +24,7 @@ export function AuthService() {
 
 
   return {
-    login
+    login,
+    register
   };
 }
