@@ -7,6 +7,7 @@ export type AuthContextType = {
   saveUserId: (newUserId: string) => void
   userName: string,
   saveUserName: (newUserName: string) => void,
+  logout: () => void
 }
 
 export const AuthContext = React.createContext<
@@ -41,13 +42,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('username', newUserName);
   }
 
+  const logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('username')
+  }
+
   const value = {
     token,
     saveToken,
     userId,
     saveUserId,
     userName,
-    saveUserName
+    saveUserName,
+    logout
   } as AuthContextType;
 
   return (
