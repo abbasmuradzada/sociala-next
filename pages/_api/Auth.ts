@@ -10,6 +10,7 @@ export function AuthService() {
     userName,
     password,
     email,
+    // status: "private",
   });
 
   const resetPassword = ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => HTTP.client().put(`/auth/changePassword`, {

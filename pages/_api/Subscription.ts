@@ -4,6 +4,10 @@ import { HTTP } from "./axiosconfig";
 export function SubscriptionService() {
   const getFollowers = (id: string) => HTTP.client().get(`/subscription/followers/${id}`);
   const getFollowing = (id: string) => HTTP.client().get(`/subscription/following/${id}`);
+  const getLimitedPendingUsers = () => HTTP.client().get(`/subscription/limitedPendingusers`);
+
+  const toggleFollowRequest = (userId: string) => HTTP.client().post(`/subscription/toUser/${userId}`)
+
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   // const likeOrUnlike = (id: string) =>
@@ -14,10 +18,13 @@ export function SubscriptionService() {
   // const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
   const useGetFollowers = (id: any) => useQuery(['getFollowers', id], () => getFollowers(id))
   const useGetFollowing = (id: any) => useQuery(['getFollowing', id], () => getFollowing(id))
+  const useGetLimitedPendingUsers = () => useQuery('useGetLimitedPendingUsers', () => getLimitedPendingUsers())
 
 
   return {
     useGetFollowers,
-    useGetFollowing
+    useGetFollowing,
+    toggleFollowRequest,
+    useGetLimitedPendingUsers
   };
 }

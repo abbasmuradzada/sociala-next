@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import moment from "moment";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommentSection from "../../components/Comments";
 import { FeedLayout } from "../../components/layouts/FeedLayout";
 import PostFooter from "../../components/PostFooter";
@@ -102,8 +102,8 @@ const Feed: NextPage = ({ children }) => {
             <>
               {activeCommentSections.find(comment => comment.id === post._id)
                 ?.active && (
-                <CommentSection post={post} setCommentCount={setCommentCount} />
-              )}
+                  <CommentSection post={post} setCommentCount={setCommentCount} />
+                )}
             </>
           </div>
         ))}

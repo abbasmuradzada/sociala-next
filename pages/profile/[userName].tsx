@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from 'react-query';
+import { AuthContextType, useAuth } from "../../context";
+import { SubscriptionService } from "../_api/Subscription";
 import { UserService } from "../_api/User";
 
 const Profile = () => {
@@ -11,6 +13,9 @@ const Profile = () => {
 
   const userService = UserService()
   const queryClient = useQueryClient();
+
+  const { userName } = useAuth() as AuthContextType
+
 
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
@@ -23,6 +28,10 @@ const Profile = () => {
   useEffect(() => {
     setUser(data?.data.user)
   }, [userLoading])
+
+  const toggleFriendRequest = (id: string) => {
+    SubscriptionService().toggleFollowRequest(id)
+  }
 
   if (!user) {
     return <h1>loading...</h1>
@@ -38,9 +47,13 @@ const Profile = () => {
               <figure className="avatar position-absolute w100 z-index-1" ><img src={user?.profilePicture} alt="image" className="float-right p-1 bg-white rounded-circle w-100" /></figure>
               <h4 className="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">{user?.userName} <span className="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">{user?.email}</span></h4>
               <div className="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
-                <a href="#" className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Add Friend</a>
-                <a href="#" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i className="feather-mail font-md" /></a>
-                <a href="#" id="dropdownMenu4" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more font-md tetx-dark" /></a>
+                {router?.query?.userName !== userName &&
+                  <>
+                    <a onClick={() => toggleFriendRequest(user?._id)} className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Add Friend</a>
+                    {/* <a href="#" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i className="feather-mail font-md" /></a> */}
+                    {/* <a href="#" id="dropdownMenu4" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more font-md tetx-dark" /></a> */}
+                  </>
+                }
                 <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu4">
                   <div className="card-body p-0 d-flex">
                     <i className="feather-bookmark text-grey-500 me-3 font-lg" />
