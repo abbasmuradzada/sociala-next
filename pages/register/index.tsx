@@ -9,9 +9,11 @@ import "../../styles/style.module.css";
 import { AuthService } from "../_api/Auth";
 import { HTTP } from "../_api/axiosconfig";
 
-const LoginPage = () => {
-  const [username, setUsername] = useState('salam')
-  const [password, setPassword] = useState('')
+const RegisterPage = () => {
+  const [username, setUsername] = useState('example')
+  const [password, setPassword] = useState('123456')
+  const [repassword, setRepassword] = useState('123456')
+  const [email, setEmail] = useState('example@code.edu.az')
   const router = useRouter()
 
 
@@ -22,10 +24,11 @@ const LoginPage = () => {
   HTTP.createClient();
 
 
-  const useLogin = (userName, password) => {
-    AuthService().login({
+  const useRegister = (userName, password, email) => {
+    AuthService().register({
       userName,
-      password
+      password,
+      email
     }).then(res => {
       saveUserId(res.data.user._id);
       saveToken(res.data.user.token);
@@ -82,20 +85,38 @@ const LoginPage = () => {
                     <input
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      v-model="email"
                       type="text"
                       className="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
-                      placeholder="enter username or email"
+                      placeholder="username"
+                    />
+                  </div>
+                  <div className="form-group icon-input mb-3">
+                    <i className="font-sm ti-email text-grey-500 pe-0" />
+                    <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      className="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
+                      placeholder="email"
                     />
                   </div>
                   <div className="form-group icon-input mb-1">
                     <input
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      v-model="password"
                       type="Password"
                       className="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
                       placeholder="Password"
+                    />
+                    <i className="font-sm ti-lock text-grey-500 pe-0" />
+                  </div>
+                  <div className="form-group icon-input mb-1">
+                    <input
+                      value={repassword}
+                      onChange={(e) => setRepassword(e.target.value)}
+                      type="Password"
+                      className="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
+                      placeholder="Re Password"
                     />
                     <i className="font-sm ti-lock text-grey-500 pe-0" />
                   </div>
@@ -119,12 +140,12 @@ const LoginPage = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault()
-                        useLogin(username, password)
+                        useRegister(username, password, email)
                       }}
                       type="submit"
                       className="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0 "
                     >
-                      Login
+                      Register
                     </button>
                   </div>
                 </form>
@@ -145,8 +166,8 @@ const LoginPage = () => {
 }
 
 
-export default LoginPage;
+export default RegisterPage;
 
-LoginPage.getLayout = function PageLayout(page: NextPage) {
+RegisterPage.getLayout = function PageLayout(page: NextPage) {
   return <>{page}</>;
 };
