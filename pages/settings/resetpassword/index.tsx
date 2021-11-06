@@ -1,16 +1,37 @@
 import Link from "next/link";
+import Router from 'next/router';
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthService } from "../../_api/Auth";
 
 const ResetPassword = () => {
+  const [errMsg, setErrorMsg] = useState<string | null>(null)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
   const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {
+    if (data.newPassword.length < 6 || data.newRePassword.length < 6 || data.currentPassword.length < 6) {
+      setErrorMsg("password must not be less than 6 caracter")
+      return
+    }
+    if (data.newPassword !== data.newRePassword) {
+      setErrorMsg("password and repassword are not same")
+      return
+    }
     AuthService().resetPassword({
       oldPassword: data.currentPassword,
       newPassword: data.newPassword,
     })
+      .then((() => {
+        setErrorMsg(null)
+        setSuccessMsg('reset password complete successfull')
+        Router.back()
+      }))
+      .catch((error) => {
+        setErrorMsg(error.response.data.message)
+        setSuccessMsg(null)
+      })
   }
 
   return (
@@ -24,6 +45,9 @@ const ResetPassword = () => {
             <h4 className="font-xs text-white fw-600 ms-4 mb-0">Change Password</h4>
           </div>
           <div className="card-body p-lg-5 p-4 w-100 border-0">
+            {successMsg && <div className="row">
+              <h2 className='text-success' >{successMsg}</h2>
+            </div>}
             <form id='delform' onSubmit={handleSubmit(onSubmit)} >
               <div className="row">
                 <div className="col-lg-12 mb-3">
@@ -49,6 +73,11 @@ const ResetPassword = () => {
                   </div>
                 </div>
               </div>
+
+              {errMsg && <div className="row mb-2">
+                <h2 className="text-red">{errMsg}</h2>
+              </div>}
+
               <div className="row">
                 <div className="col-lg-12 mb-0">
                   {/* <button className='className="bg-reset-pass text-center text-white font-xsss fw-600 p-3 w175 rounded-3 d-inline-block"' type='submit'> */}
