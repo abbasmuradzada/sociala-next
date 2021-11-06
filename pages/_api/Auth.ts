@@ -12,6 +12,11 @@ export function AuthService() {
     email,
   });
 
+  const resetPassword = ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => HTTP.client().put(`/auth/changePassword`, {
+    oldPassword,
+    newPassword,
+  })
+
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   // const likeOrUnlike = (id: string) =>
@@ -25,6 +30,7 @@ export function AuthService() {
 
   return {
     login,
-    register
+    register,
+    resetPassword
   };
 }
