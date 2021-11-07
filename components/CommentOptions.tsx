@@ -9,6 +9,8 @@ interface IProps {
   toggleComments: any;
   getCommentsToggle: any;
   post: any;
+  toggleCommentCount: any;
+  commentToggle: any;
 }
 
 const CommentOptions = ({
@@ -16,6 +18,8 @@ const CommentOptions = ({
   toggleComments,
   getCommentsToggle,
   post,
+  toggleCommentCount,
+  commentToggle,
 }: IProps) => {
   const { userId } = useAuth() as AuthContextType;
   const state = useReactive({
@@ -40,6 +44,7 @@ const CommentOptions = ({
         })
         .then(() => {
           afterSuccessfullRequest();
+          toggleCommentCount(commentToggle - 1);
         });
 
     if (comment.commentWriter._id === userId)

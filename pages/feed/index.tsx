@@ -1,9 +1,8 @@
-/* eslint-disable no-underscore-dangle */
 import { useToggle } from "ahooks";
 import { Row } from "antd";
 import moment from "moment";
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FeedLayout } from "../../components/layouts/FeedLayout";
 import PostFooter from "../../components/PostFooter";
 import PostOptions from "../../components/PostOptions";
@@ -108,21 +107,7 @@ const Feed: NextPage = () => {
               post={post}
               toggleCommentSection={toggleCommentSection}
               activeCommentSections={activeCommentSections}
-              // commentCount={commentCount}
-              // setCommentCount={setCommentCount}
             />
-            {/* <>
-              {activeCommentSections.find(comment => comment.id === post._id)
-                ?.active && (
-                <CommentSection
-                  post={post}
-                  commentToggle={commentToggle}
-                  toggleCommentCount={toggleCommentCount}
-                  // setCommentCount={setCommentCount}
-                  // commentCount={commentCount}
-                />
-              )}
-            </> */}
           </div>
         ))}
       </>

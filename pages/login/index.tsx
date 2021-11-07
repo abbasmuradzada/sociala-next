@@ -11,7 +11,7 @@ import { HTTP } from "../_api/axiosconfig";
 
 const LoginPage = () => {
   const [username, setUsername] = useState('salam')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('123456')
   const router = useRouter()
 
 

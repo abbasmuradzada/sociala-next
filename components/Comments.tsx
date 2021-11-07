@@ -102,6 +102,8 @@ const Comments = ({ post, commentToggle, toggleCommentCount }: IProps) => {
                         comment={comment}
                         getCommentsToggle={getCommentsToggle}
                         toggleComments={toggleComments}
+                        commentToggle={commentToggle}
+                        toggleCommentCount={toggleCommentCount}
                         post={post}
                       />
                     )}
