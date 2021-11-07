@@ -8,7 +8,7 @@ import { UserService } from "../_api/User";
 
 const Profile = () => {
   const router = useRouter()
-  const [userId, setUserId] = useState()
+  const [followBtn, setFollowBtn] = useState('follow')
   const [user, setUser] = useState()
 
   const userService = UserService()
@@ -27,10 +27,38 @@ const Profile = () => {
 
   useEffect(() => {
     setUser(data?.data.user)
+    switch (data?.data.isSubscribe) {
+      case 'false':
+        setFollowBtn('follow')
+        break;
+      case 'following':
+        setFollowBtn('unfollow')
+        break;
+      case 'pending':
+        setFollowBtn('pending')
+        break;
+      default:
+        break;
+    }
   }, [userLoading])
 
   const toggleFriendRequest = (id: string) => {
     SubscriptionService().toggleFollowRequest(id)
+      .then(res => {
+        switch (res.data.follow) {
+          case 'false':
+            setFollowBtn('follow')
+            break;
+          case 'following':
+            setFollowBtn('unfollow')
+            break;
+          case 'pending':
+            setFollowBtn('pending')
+            break;
+          default:
+            break;
+        }
+      })
   }
 
   if (!user) {
@@ -49,7 +77,7 @@ const Profile = () => {
               <div className="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
                 {router?.query?.userName !== userName &&
                   <>
-                    <a onClick={() => toggleFriendRequest(user?._id)} className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Add Friend</a>
+                    <a onClick={() => toggleFriendRequest(user?._id)} className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">{followBtn}</a>
                     {/* <a href="#" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i className="feather-mail font-md" /></a> */}
                     {/* <a href="#" id="dropdownMenu4" className="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more font-md tetx-dark" /></a> */}
                   </>

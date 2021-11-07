@@ -7,6 +7,8 @@ export function SubscriptionService() {
   const getLimitedPendingUsers = () => HTTP.client().get(`/subscription/limitedPendingusers`);
 
   const toggleFollowRequest = (userId: string) => HTTP.client().post(`/subscription/toUser/${userId}`)
+  const acceptFollowRequest = (userId: string) => HTTP.client().post(`/subscription/accept/${userId}`)
+  const deleteFollowRequest = (userId: string) => HTTP.client().post(`/subscription/delete/${userId}`)
 
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
@@ -25,6 +27,8 @@ export function SubscriptionService() {
     useGetFollowers,
     useGetFollowing,
     toggleFollowRequest,
-    useGetLimitedPendingUsers
+    useGetLimitedPendingUsers,
+    acceptFollowRequest,
+    deleteFollowRequest
   };
 }

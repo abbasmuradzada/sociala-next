@@ -1,16 +1,34 @@
 import Image from "next/image";
 import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 import { SubscriptionService } from "../../pages/_api/Subscription";
 
 
 const FeedLayout: React.FC = ({ children }) => {
   const [pendingFollowers, setPendingFollowers] = useState([]);
 
+  const subscriptionService = SubscriptionService()
+  const queryClient = useQueryClient();
+
   const { data: limitedPendingUsers, isLoading } = SubscriptionService().useGetLimitedPendingUsers()
 
   React.useEffect(() => {
     if (!isLoading) setPendingFollowers(limitedPendingUsers?.data.subsList);
   }, [isLoading])
+
+  const acceptFollowRequest = (id: string) => {
+    subscriptionService.acceptFollowRequest(id)
+      .then(() => {
+        if (pendingFollowers.length >= 3) queryClient.invalidateQueries('useGetLimitedPendingUsers');
+      })
+  }
+
+  const deleteFollowRequest = (id: string) => {
+    subscriptionService.deleteFollowRequest(id)
+      .then(() => {
+        if (pendingFollowers.length >= 3) queryClient.invalidateQueries('useGetLimitedPendingUsers');
+      })
+  }
 
   return (
     <>
@@ -71,7 +89,7 @@ const FeedLayout: React.FC = ({ children }) => {
                   "
               >
                 <a
-                  href="/"
+                  onClick={() => acceptFollowRequest(follower.userFrom._id)}
                   className="
                       p-2
                       lh-20
@@ -88,7 +106,7 @@ const FeedLayout: React.FC = ({ children }) => {
                   Confirm
                 </a>
                 <a
-                  href="/"
+                  onClick={() => deleteFollowRequest(follower._id)}
                   className="
                       p-2
                       lh-20
