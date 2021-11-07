@@ -4,6 +4,7 @@ import { HTTP } from "./axiosconfig";
 export function SubscriptionService() {
   const getFollowers = (id: string) => HTTP.client().get(`/subscription/followers/${id}`);
   const getFollowing = (id: string) => HTTP.client().get(`/subscription/following/${id}`);
+  const deleteFollower = (id: string) => HTTP.client().delete(`/subscription/removeYourSub/${id}`);
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   // const likeOrUnlike = (id: string) =>
@@ -18,6 +19,7 @@ export function SubscriptionService() {
 
   return {
     useGetFollowers,
-    useGetFollowing
+    useGetFollowing,
+    deleteFollower
   };
 }
