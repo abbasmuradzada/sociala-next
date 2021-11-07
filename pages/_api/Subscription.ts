@@ -4,6 +4,7 @@ import { HTTP } from "./axiosconfig";
 export function SubscriptionService() {
   const getFollowers = (id: string) => HTTP.client().get(`/subscription/followers/${id}`);
   const getFollowing = (id: string) => HTTP.client().get(`/subscription/following/${id}`);
+  const deleteFollower = (id: string) => HTTP.client().delete(`/subscription/removeYourSub/${id}`);
   const getLimitedPendingUsers = () => HTTP.client().get(`/subscription/limitedPendingusers`);
 
   const toggleFollowRequest = (userId: string) => HTTP.client().post(`/subscription/toUser/${userId}`)
@@ -26,6 +27,7 @@ export function SubscriptionService() {
   return {
     useGetFollowers,
     useGetFollowing,
+    deleteFollower,
     toggleFollowRequest,
     useGetLimitedPendingUsers,
     acceptFollowRequest,

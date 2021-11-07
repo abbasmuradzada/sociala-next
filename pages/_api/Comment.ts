@@ -8,9 +8,9 @@ export function CommentService() {
   const commentLikeOrUnlike = (id: string) =>
     HTTP.client().post(`/comment/likeOrUnlike/${id}`);
   const deleteYourPostComment = (data: { postId: string; commentId: string }) =>
-    HTTP.client().delete(`/comment/yourPost`, data);
+    HTTP.client().delete(`/comment/yourPost`, { data });
   const deleteYourComment = (commentId: string, data: { postId: string }) =>
-    HTTP.client().delete(`/comment/own/${commentId}`, data);
+    HTTP.client().delete(`/comment/own/${commentId}`, { data });
   const getComments = (postId: string) =>
     HTTP.client().get(`/comment/${postId}`);
 
