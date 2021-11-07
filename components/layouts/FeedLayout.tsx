@@ -10,25 +10,23 @@ const FeedLayout: React.FC = ({ children }) => {
   const subscriptionService = SubscriptionService()
   const queryClient = useQueryClient();
 
-  const { data: limitedPendingUsers, isLoading, isFetching } = SubscriptionService().useGetLimitedPendingUsers()
+  const { data: limitedPendingUsers, isLoading, isRefetching, isFetching } = SubscriptionService().useGetLimitedPendingUsers()
 
   React.useEffect(() => {
     if (!isLoading) setPendingFollowers(limitedPendingUsers?.data.subsList);
-  }, [isLoading, isFetching])
-
-  // console.log(limitedPendingUsers?.data.subsList);
+  }, [isLoading, isRefetching, isFetching])
 
   const acceptFollowRequest = (id: string) => {
     subscriptionService.acceptFollowRequest(id)
       .then(() => {
-        if (pendingFollowers.length >= 3) queryClient.invalidateQueries('useGetLimitedPendingUsers');
+        queryClient.invalidateQueries('useGetLimitedPendingUsers');
       })
   }
 
   const deleteFollowRequest = (id: string) => {
     subscriptionService.deleteFollowRequest(id)
       .then(() => {
-        if (pendingFollowers.length >= 3) queryClient.invalidateQueries('useGetLimitedPendingUsers');
+        queryClient.invalidateQueries('useGetLimitedPendingUsers');
       })
   }
 
@@ -38,6 +36,7 @@ const FeedLayout: React.FC = ({ children }) => {
         {children}
       </div>
       <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+        {pendingFollowers.length > 0 && 
         <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
           <div className="card-body d-flex align-items-center p-4">
             <h4 className="fw-700 mb-0 font-xssss text-grey-900">
@@ -127,6 +126,7 @@ const FeedLayout: React.FC = ({ children }) => {
             </>
           ))}
         </div>
+         }
       </div>
     </>
   )

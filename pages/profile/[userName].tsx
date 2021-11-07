@@ -9,13 +9,13 @@ import { UserService } from "../_api/User";
 const Profile = () => {
   const router = useRouter()
   const [followBtn, setFollowBtn] = useState('follow')
+  const [isPublic, setIsPublic] = useState(true)
   const [user, setUser] = useState()
 
   const userService = UserService()
   const queryClient = useQueryClient();
 
   const { userName } = useAuth() as AuthContextType
-
 
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
@@ -40,6 +40,11 @@ const Profile = () => {
       default:
         break;
     }
+    if (data?.data.isSubscribe !== 'following' && data?.data.user.status === "private" && data?.data.user.userName !== userName) {
+      setIsPublic(false)
+    }else{
+      setIsPublic(true)
+    }    
   }, [userLoading])
 
   const toggleFriendRequest = (id: string) => {
@@ -208,7 +213,10 @@ const Profile = () => {
         </div>
         <div className="col-xl-8 col-xxl-9 col-lg-8">
 
+          {!isPublic ? (<h1>this is private account</h1>) : 
 
+         (
+           <>
           <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3 mt-3">
             <div className="card-body p-0">
               <a href="#" className=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight" />Create Post</a>
@@ -242,7 +250,6 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
 
           <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
             <div className="card-body p-0 d-flex">
@@ -319,8 +326,6 @@ const Profile = () => {
             </div>
           </div>
 
-
-
           <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
             <div className="card-body p-0 d-flex">
               <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
@@ -385,8 +390,10 @@ const Profile = () => {
               <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
             </div>
           </div>
+          </>
+         )
 
-
+}
 
 
         </div>
