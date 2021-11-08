@@ -398,9 +398,9 @@ const MainLayout = ({ children }: IProps) => {
                 </div>
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block" />
-                  <Link href="feed">
+                  <Link href="/feed">
                     <li className='cursor-pointer'>
-                      <a href="default.html" className="nav-content-bttn open-font">
+                      <a className="nav-content-bttn open-font">
                         <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
                         <span>Newsfeed</span>
                       </a>
