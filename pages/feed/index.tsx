@@ -2,6 +2,7 @@ import { useToggle } from "ahooks";
 import { Row } from "antd";
 import moment from "moment";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FeedLayout } from "../../components/layouts/FeedLayout";
 import PostFooter from "../../components/PostFooter";
@@ -10,10 +11,15 @@ import { PostService } from "../_api/Post";
 
 const Feed: NextPage = () => {
   const [posts, setPosts] = useState([]);
+  const router = useRouter()
   const [activeCommentSections, setActiveCommentSections] = useState<
     { id: string; active: boolean }[]
   >([]);
   const [getPostsToggle, { toggle: togglePosts }] = useToggle(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  }, [])
 
   const commentSectionHandler = ({ _id: id }) => {
     setActiveCommentSections(prevState => [

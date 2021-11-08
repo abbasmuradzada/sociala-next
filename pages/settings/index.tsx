@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { AuthContextType, useAuth } from "../../context";
 
 const Settings = () => {
@@ -10,6 +11,10 @@ const Settings = () => {
         router.push('/login')
 
     }
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) router.push('/login')
+    }, [])
 
     return (
         <div className="middle-sidebar-left">

@@ -13,6 +13,10 @@ const Followers = () => {
   const subscriptionService = SubscriptionService()
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  }, [])
+
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
   const { data, isLoading: followingLoading } = subscriptionService.useGetFollowing(getId?.data.id)

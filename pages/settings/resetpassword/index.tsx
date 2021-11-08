@@ -1,14 +1,18 @@
 import Link from "next/link";
-import Router from 'next/router';
-import { useState } from "react";
+import Router, { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthService } from "../../_api/Auth";
 
 const ResetPassword = () => {
   const [errMsg, setErrorMsg] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
-
+  const router = useRouter()
   const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  }, [])
 
   const onSubmit = (data: any) => {
     if (data.newPassword.length < 6 || data.newRePassword.length < 6 || data.currentPassword.length < 6) {

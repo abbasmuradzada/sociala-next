@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Counter from "../components/counter/Counter";
 import styles from "../styles/Home.module.css";
@@ -9,11 +10,17 @@ import { PostService } from "./_api/Post";
 const IndexPage: NextPage = () => {
   const [posts, setPosts] = useState([]);
 
+  const router = useRouter()
+
   useEffect(() => {
     PostService()
       .getOwnPost()
       .then((res) => setPosts(res.data.posts));
   }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  }, [])
 
   return (
     <div className={styles.container}>

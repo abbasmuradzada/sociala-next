@@ -16,7 +16,7 @@ const Profile = () => {
   const userService = UserService()
   const queryClient = useQueryClient();
 
-  const { userName } = useAuth() as AuthContextType
+  const { userName, token } = useAuth() as AuthContextType
 
   const { data: getId, isLoading } = userService.useGetUserIdByUsername(router?.query?.userName)
 
@@ -25,6 +25,10 @@ const Profile = () => {
   useEffect(() => {
     queryClient.invalidateQueries(['getSingleUser', getId?.data.id]);
   }, [isLoading])
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  }, [])
 
   useEffect(() => {
     setUser(data?.data.user)
@@ -43,9 +47,9 @@ const Profile = () => {
     }
     if (data?.data.isSubscribe !== 'following' && data?.data.user.status === "private" && data?.data.user.userName !== userName) {
       setIsPublic(false)
-    }else{
+    } else {
       setIsPublic(true)
-    }    
+    }
   }, [userLoading])
 
   const toggleFriendRequest = (id: string) => {
@@ -214,187 +218,187 @@ const Profile = () => {
         </div>
         <div className="col-xl-8 col-xxl-9 col-lg-8">
 
-          {!isPublic ? (<PrivatePage/>) : 
+          {!isPublic ? (<PrivatePage />) :
 
-         (
-           <>
-          <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3 mt-3">
-            <div className="card-body p-0">
-              <a href="#" className=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight" />Create Post</a>
-            </div>
-            <div className="card-body p-0 mt-3 position-relative">
-              <figure className="avatar position-absolute ms-2 mt-1 top-5"><img src={user?.profilePicture} alt="image" className="shadow-sm rounded-circle w30" /></figure>
-              <textarea name="message" className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" placeholder="What's on your mind?" />
-            </div>
-            <div className="card-body d-flex p-0 mt-0">
-              <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-danger feather-video me-2" /><span className="d-none-xs">Live Video</span></a>
-              <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-success feather-image me-2" /><span className="d-none-xs">Photo/Video</span></a>
-              <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-warning feather-camera me-2" /><span className="d-none-xs">Feeling/Activity</span></a>
-              <a href="#" className="ms-auto" id="dropdownMenu8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
-              <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu8">
-                <div className="card-body p-0 d-flex">
-                  <i className="feather-bookmark text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+            (
+              <>
+                <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3 mt-3">
+                  <div className="card-body p-0">
+                    <a href="#" className=" font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i className="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight" />Create Post</a>
+                  </div>
+                  <div className="card-body p-0 mt-3 position-relative">
+                    <figure className="avatar position-absolute ms-2 mt-1 top-5"><img src={user?.profilePicture} alt="image" className="shadow-sm rounded-circle w30" /></figure>
+                    <textarea name="message" className="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" placeholder="What's on your mind?" />
+                  </div>
+                  <div className="card-body d-flex p-0 mt-0">
+                    <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-danger feather-video me-2" /><span className="d-none-xs">Live Video</span></a>
+                    <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-success feather-image me-2" /><span className="d-none-xs">Photo/Video</span></a>
+                    <a href="#" className="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i className="font-md text-warning feather-camera me-2" /><span className="d-none-xs">Feeling/Activity</span></a>
+                    <a href="#" className="ms-auto" id="dropdownMenu8" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
+                    <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu8">
+                      <div className="card-body p-0 d-flex">
+                        <i className="feather-bookmark text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-lock text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-lock text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
-            <div className="card-body p-0 d-flex">
-              <figure className="avatar me-3"><img src="images/user-7.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
-              <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">3 hour ago</span></h4>
-              <a href="#" className="ms-auto" id="dropdownMenu7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
-              <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu7">
-                <div className="card-body p-0 d-flex">
-                  <i className="feather-bookmark text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+                  <div className="card-body p-0 d-flex">
+                    <figure className="avatar me-3"><img src="images/user-7.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
+                    <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">3 hour ago</span></h4>
+                    <a href="#" className="ms-auto" id="dropdownMenu7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
+                    <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu7">
+                      <div className="card-body p-0 d-flex">
+                        <i className="feather-bookmark text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-lock text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body p-0 me-lg-5">
+                    <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
+                  </div>
+                  <div className="card-body d-block p-0">
+                    <div className="row ps-2 pe-2">
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-10.jpg" data-lightbox="roadtrip"><img src="images/t-10.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-11.jpg" data-lightbox="roadtrip"><img src="images/t-11.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-12.jpg" data-lightbox="roadtrip" className="position-relative d-block"><img src="images/t-12.jpg" className="rounded-3 w-100" alt="image" /><span className="img-count font-sm text-white ls-3 fw-600"><b>+2</b></span></a></div>
+                    </div>
+                  </div>
+                  <div className="card-body d-flex p-0 mt-3">
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
+                    <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
+                  </div>
                 </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-lock text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-              </div>
-            </div>
-            <div className="card-body p-0 me-lg-5">
-              <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
-            </div>
-            <div className="card-body d-block p-0">
-              <div className="row ps-2 pe-2">
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-10.jpg" data-lightbox="roadtrip"><img src="images/t-10.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-11.jpg" data-lightbox="roadtrip"><img src="images/t-11.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-12.jpg" data-lightbox="roadtrip" className="position-relative d-block"><img src="images/t-12.jpg" className="rounded-3 w-100" alt="image" /><span className="img-count font-sm text-white ls-3 fw-600"><b>+2</b></span></a></div>
-              </div>
-            </div>
-            <div className="card-body d-flex p-0 mt-3">
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
-              <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
-            </div>
-          </div>
 
-          <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
-            <div className="card-body p-0 d-flex">
-              <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
-              <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
-              <a href="#" className="ms-auto" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
-              <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
-                <div className="card-body p-0 d-flex">
-                  <i className="feather-bookmark text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
+                  <div className="card-body p-0 d-flex">
+                    <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
+                    <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
+                    <a href="#" className="ms-auto" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
+                    <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu2">
+                      <div className="card-body p-0 d-flex">
+                        <i className="feather-bookmark text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-lock text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body p-0 me-lg-5">
+                    <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
+                  </div>
+                  <div className="card-body d-flex p-0">
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
+                    <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
+                  </div>
                 </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-lock text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-              </div>
-            </div>
-            <div className="card-body p-0 me-lg-5">
-              <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
-            </div>
-            <div className="card-body d-flex p-0">
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
-              <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
-            </div>
-          </div>
 
-          <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
-            <div className="card-body p-0 d-flex">
-              <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
-              <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
-              <a href="#" className="ms-auto" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
-              <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu5">
-                <div className="card-body p-0 d-flex">
-                  <i className="feather-bookmark text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
+                  <div className="card-body p-0 d-flex">
+                    <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
+                    <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
+                    <a href="#" className="ms-auto" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
+                    <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownMenu5">
+                      <div className="card-body p-0 d-flex">
+                        <i className="feather-bookmark text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                      <div className="card-body p-0 d-flex mt-2">
+                        <i className="feather-lock text-grey-500 me-3 font-lg" />
+                        <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body p-0 mb-3 rounded-3 overflow-hidden">
+                    <a href="#" className="video-btn" />
+                  </div>
+                  <div className="card-body p-0 me-lg-5">
+                    <p className="fw-500 text-grey-500 lh-26 font-xssss w-100 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
+                  </div>
+                  <div className="card-body d-flex p-0">
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
+                    <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
+                  </div>
                 </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-                <div className="card-body p-0 d-flex mt-2">
-                  <i className="feather-lock text-grey-500 me-3 font-lg" />
-                  <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
-                </div>
-              </div>
-            </div>
-            <div className="card-body p-0 mb-3 rounded-3 overflow-hidden">
-              <a href="#" className="video-btn" />
-            </div>
-            <div className="card-body p-0 me-lg-5">
-              <p className="fw-500 text-grey-500 lh-26 font-xssss w-100 mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
-            </div>
-            <div className="card-body d-flex p-0">
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
-              <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
-            </div>
-          </div>
 
-          <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
-            <div className="card-body p-0 d-flex">
-              <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
-              <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
-              <a href="#" className="ms-auto"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
-            </div>
+                <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
+                  <div className="card-body p-0 d-flex">
+                    <figure className="avatar me-3"><img src="images/user-8.png" alt="image" className="shadow-sm rounded-circle w45" /></figure>
+                    <h4 className="fw-700 text-grey-900 font-xssss mt-1">Anthony Daugloi <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">2 hour ago</span></h4>
+                    <a href="#" className="ms-auto"><i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" /></a>
+                  </div>
 
-            <div className="card-body p-0 me-lg-5">
-              <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
-            </div>
-            <div className="card-body d-block p-0 mb-3">
-              <div className="row ps-2 pe-2">
-                <div className="col-xs-6 col-sm-6 p-1"><a href="images/t-21.jpg" data-lightbox="roadtri"><img src="images/t-21.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-                <div className="col-xs-6 col-sm-6 p-1"><a href="images/t-22.jpg" data-lightbox="roadtri"><img src="images/t-22.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-              </div>
-              <div className="row ps-2 pe-2">
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-23.jpg" data-lightbox="roadtri"><img src="images/t-23.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-24.jpg" data-lightbox="roadtri"><img src="images/t-24.jpg" className="rounded-3 w-100" alt="image" /></a></div>
-                <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-25.jpg" data-lightbox="roadtri" className="position-relative d-block"><img src="images/t-25.jpg" className="rounded-3 w-100" alt="image" /><span className="img-count font-sm text-white ls-3 fw-600"><b>+2</b></span></a></div>
-              </div>
-            </div>
-            <div className="card-body d-flex p-0">
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
-              <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
-              <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
-            </div>
-          </div>
-          </>
-         )
+                  <div className="card-body p-0 me-lg-5">
+                    <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus <a href="#" className="fw-600 text-primary ms-2">See more</a></p>
+                  </div>
+                  <div className="card-body d-block p-0 mb-3">
+                    <div className="row ps-2 pe-2">
+                      <div className="col-xs-6 col-sm-6 p-1"><a href="images/t-21.jpg" data-lightbox="roadtri"><img src="images/t-21.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                      <div className="col-xs-6 col-sm-6 p-1"><a href="images/t-22.jpg" data-lightbox="roadtri"><img src="images/t-22.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                    </div>
+                    <div className="row ps-2 pe-2">
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-23.jpg" data-lightbox="roadtri"><img src="images/t-23.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-24.jpg" data-lightbox="roadtri"><img src="images/t-24.jpg" className="rounded-3 w-100" alt="image" /></a></div>
+                      <div className="col-xs-4 col-sm-4 p-1"><a href="images/t-25.jpg" data-lightbox="roadtri" className="position-relative d-block"><img src="images/t-25.jpg" className="rounded-3 w-100" alt="image" /><span className="img-count font-sm text-white ls-3 fw-600"><b>+2</b></span></a></div>
+                    </div>
+                  </div>
+                  <div className="card-body d-flex p-0">
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-3"><i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" /> <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />2.8K Like</a>
+                    <a href="#" className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />22 Comment</a>
+                    <a href="#" className="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i className="feather-share-2 text-grey-900 text-dark btn-round-sm font-lg" /><span className="d-none-xs">Share</span></a>
+                  </div>
+                </div>
+              </>
+            )
 
-}
+          }
 
 
         </div>
