@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from 'next/link';
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthContextType, useAuth } from "../../context";
+import { SearchService } from "../../pages/_api/Search";
 
 
 interface IProps {
@@ -11,7 +12,21 @@ interface IProps {
 
 const MainLayout = ({ children }: IProps) => {
   const queryClient = new QueryClient()
-  const { userName, token } = useAuth() as AuthContextType
+  const { userName } = useAuth() as AuthContextType
+
+  const [searchUser, setSearchUser] = useState('')
+  const [searchedUsers, setSearchedUsers] = useState([])
+
+
+  const onChangeSearchUser = (val: string) => {
+    setSearchUser(val)
+    if (val.length > 0) {
+      SearchService().searchUser(val)
+        .then(res => setSearchedUsers(res.data.result))
+    } else {
+      setSearchedUsers([])
+    }
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -71,10 +86,12 @@ const MainLayout = ({ children }: IProps) => {
             <button className="nav-menu me-0 ms-2" />
           </div>
 
-          <form action="#" className="float-left header-search">
+          <form action="#" className="float-left header-search position-relative">
             <div className="form-group mb-0 icon-input">
               <i className="feather-search font-sm text-grey-400" />
               <input
+                value={searchUser}
+                onChange={e => onChangeSearchUser(e.target.value)}
                 type="text"
                 placeholder="Start typing to search.."
                 className="
@@ -92,6 +109,13 @@ const MainLayout = ({ children }: IProps) => {
               theme-dark-bg
             "
               />
+            </div>
+            <div className='w-100 position-absolute bg-twiiter'>
+              {searchedUsers.length > 0 && (
+                <div>
+                  {searchedUsers.map(user => <p className='text-white' >{user.userName} ({user.email})</p>)}
+                </div>
+              )}
             </div>
           </form>
 
