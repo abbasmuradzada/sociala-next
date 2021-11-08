@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from 'react-query';
+import { PrivatePage } from "../../components/PrivatePage";
 import { AuthContextType, useAuth } from "../../context";
 import { SubscriptionService } from "../_api/Subscription";
 import { UserService } from "../_api/User";
@@ -213,7 +214,7 @@ const Profile = () => {
         </div>
         <div className="col-xl-8 col-xxl-9 col-lg-8">
 
-          {!isPublic ? (<h1>this is private account</h1>) : 
+          {!isPublic ? (<PrivatePage/>) : 
 
          (
            <>
