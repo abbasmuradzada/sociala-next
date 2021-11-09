@@ -2,6 +2,7 @@ import { useToggle } from "ahooks";
 import { Row } from "antd";
 import moment from "moment";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
@@ -78,21 +79,23 @@ const Feed: NextPage = () => {
               className="card-body p-0 d-flex"
               style={{ justifyContent: "space-between" }}
             >
-              <Row>
-                <figure className="avatar me-3">
-                  <img
-                    src={post.postedUser[0].profilePicture}
-                    alt="profile pic"
-                    className="shadow-sm rounded-circle w45"
-                  />
-                </figure>
-                <h4 className="fw-700 text-grey-900 font-xssss mt-1">
-                  {post?.postedUser[0]?.userName}{" "}
-                  <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                    {formatDate(post.updatedAt)}
-                  </span>
-                </h4>
-              </Row>
+              <Link href={`/profile/${post?.postedUser[0]?.userName}`}>
+                <Row style={{ cursor: "pointer" }}>
+                  <figure className="avatar me-3">
+                    <img
+                      src={post.postedUser[0].profilePicture}
+                      alt="profile pic"
+                      className="shadow-sm rounded-circle w45"
+                    />
+                  </figure>
+                  <h4 className="fw-700 text-grey-900 font-xssss mt-1">
+                    {post?.postedUser[0]?.userName}{" "}
+                    <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
+                      {formatDate(post.updatedAt)}
+                    </span>
+                  </h4>
+                </Row>
+              </Link>
               <div>
                 <PostOptions
                   post={post}
