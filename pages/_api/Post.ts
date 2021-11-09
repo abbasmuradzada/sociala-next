@@ -4,7 +4,7 @@ export function PostService() {
   const deletePost = (id: string) => HTTP.client().delete(`/post/${id}`);
   const getSinglePost = (id: string) => HTTP.client().get(`/post/${id}`);
   const getPostOfAnyUser = (id: string) =>
-    HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
+    HTTP.client().get(`/post/postsOfUser/${id}`);
   const likeOrUnlike = (id: string) =>
     HTTP.client().post(`/post/likeOrUnlike/${id}`);
   const getAllPosts = () => HTTP.client().get("/post");
@@ -12,7 +12,8 @@ export function PostService() {
   const getPostOfSubs = () => HTTP.client().get("/post/postsOfSubs");
   const createPost = (data: { content: string, type: 'photo' | 'video', image: any }) => HTTP.client().post("/post", data);
   const createVideoPost = (data: { content: string, type: 'photo' | 'video', video: any }) => HTTP.client().post("post/video", data);
-  const updatePost = (data: any) => HTTP.client().post("post/update", data);
+  const updatePost = (data: any) => HTTP.client().put("post/update", data);
+  const updatePostPhoto = (postId: string, data: any) => HTTP.client().put(`post/updatePicture/${postId}`, data);
 
   return {
     deletePost,
@@ -25,5 +26,6 @@ export function PostService() {
     createVideoPost,
     createPost,
     updatePost,
+    updatePostPhoto
   };
 }

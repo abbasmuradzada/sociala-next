@@ -33,9 +33,11 @@ const Profile = () => {
 
   const { userName } = useAuth() as AuthContextType;
 
-  const { data: getId, isLoading } = userService.useGetUserIdByUsername(
-    router?.query?.userName
-  );
+  const {
+    data: getId,
+    isLoading,
+    isSuccess,
+  } = userService.useGetUserIdByUsername(router?.query?.userName);
 
   const { data, isLoading: userLoading } = userService.useGetSingleUser(
     getId?.data.id
@@ -48,12 +50,20 @@ const Profile = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) router.push("/login");
 
-    PostService()
-      .getOwnPost()
-      .then(({ data: { posts: resPosts } }) => {
-        setPosts(resPosts);
-      });
-  }, [getPosts]);
+    if (userName === router.asPath.split("/")[2]) {
+      PostService()
+        .getOwnPost()
+        .then(({ data: { posts: resPosts } }) => {
+          setPosts(resPosts);
+        });
+    } else if (isSuccess) {
+      PostService()
+        .getPostOfAnyUser(getId.data.id)
+        .then(({ data: { posts: resPosts } }) => {
+          setPosts(resPosts);
+        });
+    }
+  }, [getPosts, isSuccess]);
 
   useEffect(() => {
     setUser(data?.data.user);
