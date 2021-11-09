@@ -19,14 +19,14 @@ const FeedLayout: React.FC = ({ children }) => {
   const acceptFollowRequest = (id: string) => {
     subscriptionService.acceptFollowRequest(id)
       .then(() => {
-        queryClient.invalidateQueries('useGetLimitedPendingUsers');
+        subscriptionService.getLimitedPendingUsers().then(res => setPendingFollowers(res.data.subsList))
       })
   }
 
   const deleteFollowRequest = (id: string) => {
     subscriptionService.deleteFollowRequest(id)
       .then(() => {
-        queryClient.invalidateQueries('useGetLimitedPendingUsers');
+        subscriptionService.getLimitedPendingUsers().then(res => setPendingFollowers(res.data.subsList))
       })
   }
 

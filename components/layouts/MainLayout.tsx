@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthContextType, useAuth } from "../../context";
@@ -17,6 +18,7 @@ const MainLayout = ({ children }: IProps) => {
   const [searchUser, setSearchUser] = useState('')
   const [searchedUsers, setSearchedUsers] = useState([])
 
+  const router = useRouter()
 
   const onChangeSearchUser = (val: string) => {
     setSearchUser(val)
@@ -26,6 +28,12 @@ const MainLayout = ({ children }: IProps) => {
     } else {
       setSearchedUsers([])
     }
+  }
+
+  const onSwitchSearchedUser = (username) => {
+    router.push(`/profile/${username}`)
+      setSearchedUsers([])
+      setSearchUser('')
   }
 
   return (
@@ -110,10 +118,14 @@ const MainLayout = ({ children }: IProps) => {
             "
               />
             </div>
-            <div className='w-100 position-absolute bg-twiiter'>
+            <div className='w-100 position-absolute'>
               {searchedUsers.length > 0 && (
-                <div>
-                  {searchedUsers.map(user => <p className='text-white' >{user.userName} ({user.email})</p>)}
+                <div className='bg-white shadow-md rounded-xxxl p-2'>
+                  {searchedUsers.map(user => 
+                  <div onClick={() => onSwitchSearchedUser(user.userName)} className='text-black border-bottom mb-3 d-flex align-items-center p-1 cursor-pointer' >
+                    <Image className='rounded-circle' width={30} height={30} src={user.profilePicture} />
+                    <div className='ms-2'>{user.userName}</div>
+                    </div>)}
                 </div>
               )}
             </div>

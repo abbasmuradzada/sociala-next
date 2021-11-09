@@ -31,6 +31,7 @@ export function SubscriptionService() {
     toggleFollowRequest,
     useGetLimitedPendingUsers,
     acceptFollowRequest,
-    deleteFollowRequest
+    deleteFollowRequest,
+    getLimitedPendingUsers
   };
 }
