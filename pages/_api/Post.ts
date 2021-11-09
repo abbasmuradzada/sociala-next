@@ -10,7 +10,8 @@ export function PostService() {
   const getAllPosts = () => HTTP.client().get("/post");
   const getOwnPost = () => HTTP.client().get("/post/myProfile");
   const getPostOfSubs = () => HTTP.client().get("/post/postsOfSubs");
-  const createVideoPost = (data: any) => HTTP.client ().post("post/video", data);
+  const createPost = (data: { content: string, type: 'photo' | 'video', image: any }) => HTTP.client().post("/post", data);
+  const createVideoPost = (data: { content: string, type: 'photo' | 'video', video: any }) => HTTP.client().post("post/video", data);
   const updatePost = (data: any) => HTTP.client().post("post/update", data);
 
   return {
@@ -22,6 +23,7 @@ export function PostService() {
     getAllPosts,
     getPostOfSubs,
     createVideoPost,
+    createPost,
     updatePost,
   };
 }

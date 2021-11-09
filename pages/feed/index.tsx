@@ -3,7 +3,8 @@ import { Row } from "antd";
 import moment from "moment";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player/lazy";
 import { FeedLayout } from "../../components/layouts/FeedLayout";
 import PostFooter from "../../components/PostFooter";
 import PostOptions from "../../components/PostOptions";
@@ -11,15 +12,15 @@ import { PostService } from "../_api/Post";
 
 const Feed: NextPage = () => {
   const [posts, setPosts] = useState([]);
-  const router = useRouter()
+  const router = useRouter();
   const [activeCommentSections, setActiveCommentSections] = useState<
     { id: string; active: boolean }[]
   >([]);
   const [getPostsToggle, { toggle: togglePosts }] = useToggle(false);
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) router.push('/login')
-  }, [])
+    if (!localStorage.getItem("token")) router.push("/login");
+  }, []);
 
   const commentSectionHandler = ({ _id: id }) => {
     setActiveCommentSections(prevState => [
@@ -81,7 +82,7 @@ const Feed: NextPage = () => {
                 <figure className="avatar me-3">
                   <img
                     src={post.postedUser[0].profilePicture}
-                    alt="image"
+                    alt="profile pic"
                     className="shadow-sm rounded-circle w45"
                   />
                 </figure>
@@ -108,6 +109,16 @@ const Feed: NextPage = () => {
 
             {post.type === "photo" && (
               <img src={post.postContent} alt="post content" />
+            )}
+
+            {post.type === "video" && (
+              <Row>
+                <ReactPlayer
+                  controls
+                  url={post.postContent}
+                  src={post.postContent}
+                />
+              </Row>
             )}
             <PostFooter
               post={post}
