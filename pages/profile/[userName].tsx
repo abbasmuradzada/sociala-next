@@ -141,7 +141,7 @@ const Profile = () => {
   const toggleCommentSection = post => {
     setActiveCommentSections(prevState =>
       prevState.map(postForComment => {
-        if (postForComment.id === post._id)
+        if (postForComment.id === post?._id)
           return {
             id: postForComment.id,
             active: !postForComment.active,
@@ -622,10 +622,10 @@ const Profile = () => {
                 </div>
               </div>
 
-              {posts.map((post: any) => (
+              {posts?.map((post: any) => (
                 <div
                   className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3"
-                  id={post._id}
+                  id={post?._id}
                 >
                   <div
                     className="card-body p-0 d-flex"
@@ -634,7 +634,7 @@ const Profile = () => {
                     <Row>
                       <figure className="avatar me-3">
                         <img
-                          src={post.postedUser[0].profilePicture}
+                          src={post?.postedUser[0].profilePicture}
                           alt="user profile"
                           className="shadow-sm rounded-circle"
                           style={{
@@ -646,7 +646,7 @@ const Profile = () => {
                       <h4 className="fw-700 text-grey-900 font-xssss mt-1">
                         {post?.postedUser[0]?.userName}{" "}
                         <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                          {formatDate(post.updatedAt)}
+                          {formatDate(post?.updatedAt)}
                         </span>
                       </h4>
                     </Row>
@@ -664,15 +664,15 @@ const Profile = () => {
                     </p>
                   </div>
 
-                  {post.type === "photo" && (
-                    <img src={post.postContent} alt="post content" />
+                  {post?.type === "photo" && (
+                    <img src={post?.postContent} alt="post content" />
                   )}
-                  {post.type === "video" && (
+                  {post?.type === "video" && (
                     <Row>
                       <ReactPlayer
                         controls
-                        url={post.postContent}
-                        src={post.postContent}
+                        url={post?.postContent}
+                        src={post?.postContent}
                       />
                     </Row>
                   )}
