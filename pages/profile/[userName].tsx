@@ -213,14 +213,18 @@ const Profile = () => {
         <div className="col-lg-12">
           <div className="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
             <div className="card-body h250 p-0 rounded-xxl overflow-hidden m-3">
-              <img src={user?.backgroundPicture} alt="image" />
+              <img src={user?.backgroundPicture} alt="bacground" />
             </div>
             <div className="card-body p-0 position-relative">
-              <figure className="avatar position-absolute w100 z-index-1">
+              <figure
+                className="avatar position-absolute w100 z-index-1"
+                style={{ top: "-40px", left: "30px" }}
+              >
                 <img
                   src={user?.profilePicture}
-                  alt="image"
+                  alt="profile pic"
                   className="float-right p-1 bg-white rounded-circle w-100"
+                  style={{ width: "100px", height: "100px" }}
                 />
               </figure>
               <h4 className="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">
@@ -413,9 +417,7 @@ const Profile = () => {
             <div className="card-body d-block p-4">
               <h4 className="fw-700 mb-3 font-xsss text-grey-900">About</h4>
               <p className="fw-500 text-grey-500 lh-24 font-xssss mb-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-                nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus
-                faucibus mollis pharetra. Proin blandit ac massa sed rhoncus
+                {user?.bio ?? "Nothing"}
               </p>
             </div>
             <div className="card-body border-top-xs d-flex">
@@ -546,7 +548,11 @@ const Profile = () => {
                     <img
                       src={user?.profilePicture}
                       alt="profile pic"
-                      className="shadow-sm rounded-circle w30"
+                      className="shadow-sm rounded-circle"
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                      }}
                     />
                   </figure>
                   <textarea
@@ -630,7 +636,11 @@ const Profile = () => {
                         <img
                           src={post.postedUser[0].profilePicture}
                           alt="user profile"
-                          className="shadow-sm rounded-circle w45"
+                          className="shadow-sm rounded-circle"
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                          }}
                         />
                       </figure>
                       <h4 className="fw-700 text-grey-900 font-xssss mt-1">

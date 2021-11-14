@@ -18,6 +18,13 @@ export function AuthService() {
     newPassword,
   })
 
+  const uploadProfilePicture = (data: { user: any }) => HTTP.client().post('/auth/profilePicture', data)
+  const uploadBgImage = (data: { user: any }) => HTTP.client().post('/auth/backgroundPicture', data)
+  const updateProfile = (data: { userName?: string, bio?: string }) => HTTP.client().put('/auth/updateProfile', data)
+  const removeProfilePicture = () => HTTP.client().delete('/auth/removePicture')
+  const removeBgPicture = () => HTTP.client().delete('/auth/removeBackgroundPicture')
+
+
   // const getPostOfAnyUser = (id: string) =>
   //   HTTP.client().get(`/postpostsOfUser/postsOfUser/${id}`);
   // const likeOrUnlike = (id: string) =>
@@ -32,6 +39,11 @@ export function AuthService() {
   return {
     login,
     register,
-    resetPassword
+    resetPassword,
+    uploadProfilePicture,
+    uploadBgImage,
+    updateProfile,
+    removeBgPicture,
+    removeProfilePicture
   };
 }
