@@ -2,18 +2,27 @@ import { useToggle } from "ahooks";
 import { Row } from "antd";
 import moment from "moment";
 import type { NextPage } from "next";
+// import Stories from 'react-insta-stories';
+// import Stories from 'react-insta-stories';
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Stories from 'react-insta-stories';
 import ReactPlayer from "react-player/lazy";
 import { FeedLayout } from "../../components/layouts/FeedLayout";
 import PostFooter from "../../components/PostFooter";
 import PostOptions from "../../components/PostOptions";
 import { PostService } from "../_api/Post";
+import { StoryService } from "../_api/Story";
+
+
+
 
 const Feed: NextPage = () => {
   const [posts, setPosts] = useState([]);
   const router = useRouter();
+  const [storyShow, setStoryShow] = useState(false)
+  const [stories, setStories] = useState([])
   const [activeCommentSections, setActiveCommentSections] = useState<
     { id: string; active: boolean }[]
   >([]);
@@ -21,6 +30,17 @@ const Feed: NextPage = () => {
 
   useEffect(() => {
     if (!localStorage.getItem("token")) router.push("/login");
+    StoryService().getFeedStories()
+      .then(res => {
+        const a = res.data.stories?.map((story: any) => ({
+          url: story.storyContent, header: {
+            heading: story.postedUser[0].userName,
+            subheading: `${moment().diff(story.createdAt, "hours")} hours ago`,
+            profileImage: story.postedUser[0].profilePicture,
+          },
+        }))
+        setStories(a);
+      })
   }, []);
 
   const commentSectionHandler = ({ _id: id }) => {
@@ -67,9 +87,69 @@ const Feed: NextPage = () => {
     return moment(postDate).fromNow();
   };
 
+  // const stories = [
+  //   'http://cdn.cnn.com/cnnnext/dam/assets/211004122539-restricted-15-the-simpsons-balenciaga-paris-fashion-week.jpg',
+  //   'https://www.cheatsheet.com/wp-content/uploads/2021/03/The-Simpsons-family-1.jpg',
+  //   // 'https://mohitkarekar.com/icon.png',
+  // ];
+
   return (
     <FeedLayout>
+      {/* {!!storyShow && <Stories
+			stories={stories}
+			defaultInterval={5000}
+			width={432}
+			height="100vh"
+		/>} */}
+      {storyShow && <div
+        // onClick={() => setStoryShow(false)}
+        style={{
+          height: '100vh',
+          width: '100vw', backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          zIndex: 9999
+        }} >
+        <Stories
+          stories={stories}
+          defaultInterval={5000}
+          width={432}
+          height="100%"
+          onAllStoriesEnd={() => setStoryShow(false)}
+        />
+      </div>}
       <>
+        <div className='d-flex'>
+          <div onClick={() => setStoryShow(true)} className="item me-2">
+            <div data-bs-toggle="modal" data-bs-target="#Modalstory" className="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3"
+              style={{ backgroundImage: "url(http://cdn.cnn.com/cnnnext/dam/assets/211004122539-restricted-15-the-simpsons-balenciaga-paris-fashion-week.jpg);" }}
+            >
+              <div className="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
+                <a>
+                  <figure className="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="http://cdn.cnn.com/cnnnext/dam/assets/211004122539-restricted-15-the-simpsons-balenciaga-paris-fashion-week.jpg" alt="image" className="float-right p-0 bg-white rounded-circle w-100 shadow-xss" style={{ opacity: 1 }} /></figure>
+                  <div className="clearfix" />
+                  <h4 className="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Victor Exrixon </h4>
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* <div onClick={() => setStoryShow(true)} className="item">
+            <div data-bs-toggle="modal" data-bs-target="#Modalstory" className="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3"
+              style={{ backgroundImage: "url(http://cdn.cnn.com/cnnnext/dam/assets/211004122539-restricted-15-the-simpsons-balenciaga-paris-fashion-week.jpg);" }}
+            >
+              <div className="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
+                <a>
+                  <figure className="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="http://cdn.cnn.com/cnnnext/dam/assets/211004122539-restricted-15-the-simpsons-balenciaga-paris-fashion-week.jpg" alt="image" className="float-right p-0 bg-white rounded-circle w-100 shadow-xss" style={{ opacity: 1 }} /></figure>
+                  <div className="clearfix" />
+                  <h4 className="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Victor Exrixon </h4>
+                </a>
+              </div>
+            </div>
+          </div> */}
+        </div>
         {posts.map((post: any) => (
           <div
             className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3"

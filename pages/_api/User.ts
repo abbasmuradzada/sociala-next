@@ -14,6 +14,7 @@ export function UserService() {
     // getUserIdByUsername,
     useGetSingleUser,
     useGetUserIdByUsername,
-    getOwnUser
+    getOwnUser,
+    getSingleUser
   };
 }
