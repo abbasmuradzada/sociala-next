@@ -190,7 +190,7 @@ const Profile = () => {
       return PostService()
         .createPost(formData)
         .then(() => {
-          UserService().getSingleUser()
+          UserService().getSingleUser();
           cleanForm();
           triggerPosts(!getPosts);
         });
@@ -419,7 +419,7 @@ const Profile = () => {
             <div className="card-body d-block p-4">
               <h4 className="fw-700 mb-3 font-xsss text-grey-900">About</h4>
               <p className="fw-500 text-grey-500 lh-24 font-xssss mb-0">
-                {user?.bio ?? "Nothing"}
+                {user?.bio || "Nothing to show up"}
               </p>
             </div>
             <div className="card-body border-top-xs d-flex">

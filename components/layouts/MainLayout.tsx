@@ -1,40 +1,40 @@
 import Image from "next/image";
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "react-query";
 import { AuthContextType, useAuth } from "../../context";
 import { SearchService } from "../../pages/_api/Search";
-
 
 interface IProps {
   children: ReactNode;
 }
 
 const MainLayout = ({ children }: IProps) => {
-  const queryClient = new QueryClient()
-  const { userName } = useAuth() as AuthContextType
+  const queryClient = new QueryClient();
+  const { userName } = useAuth() as AuthContextType;
 
-  const [searchUser, setSearchUser] = useState('')
-  const [searchedUsers, setSearchedUsers] = useState([])
+  const [searchUser, setSearchUser] = useState("");
+  const [searchedUsers, setSearchedUsers] = useState([]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const onChangeSearchUser = (val: string) => {
-    setSearchUser(val)
+    setSearchUser(val);
     if (val.length > 0) {
-      SearchService().searchUser(val)
-        .then(res => setSearchedUsers(res.data.result))
+      SearchService()
+        .searchUser(val)
+        .then(res => setSearchedUsers(res.data.result));
     } else {
-      setSearchedUsers([])
+      setSearchedUsers([]);
     }
-  }
+  };
 
-  const onSwitchSearchedUser = (username) => {
-    router.push(`/profile/${username}`)
-      setSearchedUsers([])
-      setSearchUser('')
-  }
+  const onSwitchSearchedUser = username => {
+    router.push(`/profile/${username}`);
+    setSearchedUsers([]);
+    setSearchUser("");
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -94,7 +94,10 @@ const MainLayout = ({ children }: IProps) => {
             <button className="nav-menu me-0 ms-2" />
           </div>
 
-          <form action="#" className="float-left header-search position-relative">
+          <form
+            action="#"
+            className="float-left header-search position-relative"
+          >
             <div className="form-group mb-0 icon-input">
               <i className="feather-search font-sm text-grey-400" />
               <input
@@ -118,29 +121,38 @@ const MainLayout = ({ children }: IProps) => {
             "
               />
             </div>
-            <div className='w-100 position-absolute'>
+            <div className="w-100 position-absolute">
               {searchedUsers.length > 0 && (
-                <div className='bg-white shadow-md rounded-xxxl p-2'>
-                  {searchedUsers.map(user => 
-                  <div onClick={() => onSwitchSearchedUser(user.userName)} className='text-black border-bottom mb-3 d-flex align-items-center p-1 cursor-pointer' >
-                    <Image className='rounded-circle' width={30} height={30} src={user.profilePicture} />
-                    <div className='ms-2'>{user.userName}</div>
-                    </div>)}
+                <div className="bg-white shadow-md rounded-xxxl p-2">
+                  {searchedUsers.map(user => (
+                    <div
+                      onClick={() => onSwitchSearchedUser(user.userName)}
+                      className="text-black border-bottom mb-3 d-flex align-items-center p-1 cursor-pointer"
+                    >
+                      <Image
+                        className="rounded-circle"
+                        width={30}
+                        height={30}
+                        src={user.profilePicture}
+                      />
+                      <div className="ms-2">{user.userName}</div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
           </form>
 
-          <a
-            href="/"
-            className="p-2 text-center ms-auto menu-icon"
-            id="dropdownMenu3"
+          <Link
+            href="/notification"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <span className="dot-count bg-warning" />
-            <i className="feather-bell font-xl text-current" />
-          </a>
+            <div className="p-2 text-center ms-auto menu-icon cursor-pointer">
+              <span className="dot-count bg-warning" />
+              <i className="feather-bell font-xl text-current" />
+            </div>
+          </Link>
           <div
             className="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg"
             aria-labelledby="dropdownMenu3"
@@ -148,7 +160,8 @@ const MainLayout = ({ children }: IProps) => {
             <h4 className="fw-700 font-xss mb-4">Notification</h4>
             <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
               <Image
-                width="45px" height="45px"
+                width="45px"
+                height="45px"
                 src="/user-8.png"
                 alt="user"
                 className="w40 position-absolute left-0"
@@ -165,7 +178,8 @@ const MainLayout = ({ children }: IProps) => {
             </div>
             <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
               <Image
-                width="45px" height="45px"
+                width="45px"
+                height="45px"
                 src="/user-4.png"
                 alt="user"
                 className="w40 position-absolute left-0"
@@ -183,7 +197,8 @@ const MainLayout = ({ children }: IProps) => {
 
             <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
               <Image
-                width="45px" height="45px"
+                width="45px"
+                height="45px"
                 src="/user-7.png"
                 alt="user"
                 className="w40 position-absolute left-0"
@@ -200,7 +215,8 @@ const MainLayout = ({ children }: IProps) => {
             </div>
             <div className="card bg-transparent-card w-100 border-0 ps-5">
               <Image
-                width="45px" height="45px"
+                width="45px"
+                height="45px"
                 src="/user-6.png"
                 alt="user"
                 className="w40 position-absolute left-0"
@@ -216,7 +232,10 @@ const MainLayout = ({ children }: IProps) => {
               </h6>
             </div>
           </div>
-          <a href="/" className="p-2 text-center ms-3 menu-icon chat-active-btn">
+          <a
+            href="/"
+            className="p-2 text-center ms-3 menu-icon chat-active-btn"
+          >
             <i className="feather-message-square font-xl text-current" />
           </a>
           <div
@@ -406,7 +425,8 @@ const MainLayout = ({ children }: IProps) => {
 
           <a href="default-settings.html" className="p-0 ms-3 menu-icon">
             <Image
-              width="45px" height="45px"
+              width="45px"
+              height="45px"
               src="/profile-4.png"
               alt="user"
               className="w40 mt--1"
@@ -435,14 +455,14 @@ const MainLayout = ({ children }: IProps) => {
                 <ul className="mb-1 top-content">
                   <li className="logo d-none d-xl-block d-lg-block" />
                   <Link href="/feed">
-                    <li className='cursor-pointer'>
+                    <li className="cursor-pointer">
                       <a className="nav-content-bttn open-font">
                         <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
                         <span>Newsfeed</span>
                       </a>
                     </li>
                   </Link>
-                  <li className='cursor-pointer'>
+                  <li className="cursor-pointer">
                     <a
                       href="default-storie.html"
                       className="nav-content-bttn open-font"
@@ -452,7 +472,7 @@ const MainLayout = ({ children }: IProps) => {
                     </a>
                   </li>
                   <Link href={`/profile/${userName}`}>
-                    <li className='cursor-pointer'>
+                    <li className="cursor-pointer">
                       <a
                         href="user-page.html"
                         className="nav-content-bttn open-font"
@@ -462,7 +482,6 @@ const MainLayout = ({ children }: IProps) => {
                       </a>
                     </li>
                   </Link>
-
                 </ul>
               </div>
 
@@ -500,15 +519,13 @@ const MainLayout = ({ children }: IProps) => {
         <div className="main-content right-chat-active">
           <div className="middle-sidebar-bottom">
             <div className="middle-sidebar-left">
-              <div className="row feed-body">
-                {children}
-              </div>
+              <div className="row feed-body">{children}</div>
             </div>
           </div>
         </div>
       </div>
     </QueryClientProvider>
   );
-}
+};
 
 export default MainLayout;
