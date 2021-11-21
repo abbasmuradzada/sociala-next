@@ -102,7 +102,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    posts.map(post => {
+    posts?.map(post => {
       commentSectionHandler(post);
     });
   }, [posts]);

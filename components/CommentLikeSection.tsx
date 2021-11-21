@@ -1,6 +1,7 @@
 import { StarFilled, StarOutlined } from "@ant-design/icons";
+import { useReactive } from "ahooks";
 import { Row, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AuthContextType, useAuth } from "../context";
 import { CommentService } from "../pages/_api/Comment";
 
@@ -10,17 +11,21 @@ interface IProps {
 
 const CommentLikeSection = ({ comment }: IProps) => {
   const { userId } = useAuth() as AuthContextType;
-  const [liked, setLiked] = useState(comment.likesFrom.includes(userId));
-  const [likeCount, setLikeCount] = useState(comment.likesFrom.length);
+  const state = useReactive({
+    liked: comment.likesFrom.includes(userId),
+    likeCount: comment.likesFrom.length,
+  });
 
   useEffect(() => {}, []);
 
   const toggleLikeOrUnlike = () => {
-    setLiked((prevState: boolean) => !prevState);
     CommentService()
       .commentLikeOrUnlike(comment._id)
       .then(() => {
-        setLikeCount(!liked ? likeCount + 1 : likeCount - 1);
+        state.liked = !state.liked;
+        state.likeCount = state.liked
+          ? state.likeCount + 1
+          : state.likeCount - 1;
       });
   };
 
@@ -37,9 +42,9 @@ const CommentLikeSection = ({ comment }: IProps) => {
       }}
     >
       <Typography.Text style={{ marginRight: "5px" }}>
-        {likeCount}
+        {state.likeCount}
       </Typography.Text>
-      {liked ? (
+      {state.liked ? (
         <StarFilled style={{ color: "#ffdb58", fontSize: "24px" }} />
       ) : (
         <StarOutlined style={{ color: "#ffdb58", fontSize: "24px" }} />
