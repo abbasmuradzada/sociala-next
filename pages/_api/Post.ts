@@ -19,7 +19,7 @@ export function PostService() {
     deletePost,
     getSinglePost,
     getOwnPost,
-    getPostOfAnyUser,
+    // getPostOfAnyUser,
     likeOrUnlike,
     getAllPosts,
     getPostOfSubs,

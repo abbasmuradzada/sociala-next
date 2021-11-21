@@ -50,23 +50,24 @@ const Profile = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) router.push("/login");
 
-    if (userName === router.asPath.split("/")[2]) {
-      PostService()
-        .getOwnPost()
-        .then(({ data: { posts: resPosts } }) => {
-          setPosts(resPosts);
-        });
-    } else if (isSuccess) {
-      PostService()
-        .getPostOfAnyUser(getId.data.id)
-        .then(({ data: { posts: resPosts } }) => {
-          setPosts(resPosts);
-        });
-    }
+    // if (userName === router.asPath.split("/")[2]) {
+    //   PostService()
+    //     .getOwnPost()
+    //     .then(({ data: { posts: resPosts } }) => {
+    //       setPosts(resPosts);
+    //     });
+    // } else if (isSuccess) {
+    //   PostService()
+    //     .getPostOfAnyUser(getId.data.id)
+    //     .then(({ data: { posts: resPosts } }) => {
+    //       setPosts(resPosts);
+    //     });
+    // }
   }, [getPosts, isSuccess]);
 
   useEffect(() => {
     setUser(data?.data.user);
+    setPosts(data?.data.posts.reverse());
     switch (data?.data.isSubscribe) {
       case "false":
         setFollowBtn("follow");
@@ -189,6 +190,7 @@ const Profile = () => {
       return PostService()
         .createPost(formData)
         .then(() => {
+          UserService().getSingleUser()
           cleanForm();
           triggerPosts(!getPosts);
         });

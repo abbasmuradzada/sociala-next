@@ -3298,6 +3298,11 @@ react-hook-form@^7.16.0:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.16.0.tgz#7769dabe5f81690568dae4ef44fbd19525ae04cd"
   integrity sha512-94sQPKcDSK7D88IMzOI4ASFQpegtlR+rlA+RFfHDQUAq2jbgUN8D3fR0hA9/X0Wusg/LyDdrB4NMt0SL6vttuA==
 
+react-insta-stories@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-insta-stories/-/react-insta-stories-2.3.0.tgz#f2d0aeca7eca8f1f7a13486e573758a460de20da"
+  integrity sha512-1609XYXFPKvaoEGoHSJqdqd75pGhBv9iaX3vY2vJRaVFWVBYb8D2ax1S7iBTvqadEM34o7bbrp0g6hN4hDK44w==
+
 react-is@17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -3318,6 +3323,7 @@ react-player@^2.9.0:
     memoize-one "^5.1.1"
     prop-types "^15.7.2"
     react-fast-compare "^3.0.1"
+
 react-query@^3.28.0:
   version "3.28.0"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.28.0.tgz#1bfe12944860b2b773680054de37f19438f59d1d"
