@@ -3,10 +3,13 @@ import { useMount, useReactive } from "ahooks";
 import { Button, Image, notification, Row, Upload } from "antd";
 import { NotificationInstance } from "antd/lib/notification";
 import { RcFile } from "antd/lib/upload";
+import { useAuth } from "../../../context";
 import { AuthService } from "../../_api/Auth";
 import { UserService } from "../../_api/User";
 
 const AccountInformation = () => {
+  const { saveUserName } = useAuth();
+
   const state = useReactive({
     profilePicture: "",
     backgroundPicture: "",
@@ -89,6 +92,7 @@ const AccountInformation = () => {
       .updateProfile(formData)
       .then(() => {
         getUserData();
+        saveUserName(state.userName);
         openNotificationWithIcon(
           "success",
           `${
