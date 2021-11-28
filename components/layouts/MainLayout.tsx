@@ -1,9 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { useReactive } from "ahooks";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { AuthContextType, useAuth } from "../../context";
+import { NotificationService } from "../../pages/_api/Notification";
 import { SearchService } from "../../pages/_api/Search";
 
 interface IProps {
@@ -18,6 +21,24 @@ const MainLayout = ({ children }: IProps) => {
   const [searchedUsers, setSearchedUsers] = useState([]);
 
   const router = useRouter();
+
+  const state = useReactive({
+    hasNotification: false,
+  });
+
+  const getNotification = () => {
+    NotificationService()
+      .getNotifications()
+      .then(({ data: { notifications } }) => {
+        state.hasNotification =
+          notifications.filter(notification => notification.isNewNotification)
+            .length > 0;
+      });
+  };
+
+  useEffect(() => {
+    getNotification();
+  }, [router.pathname]);
 
   const onChangeSearchUser = (val: string) => {
     setSearchUser(val);
@@ -41,10 +62,11 @@ const MainLayout = ({ children }: IProps) => {
       <div className="main-wrapper">
         <div className="nav-header bg-white shadow-xs border-0">
           <div className="nav-top">
-            <a href="index.html">
-              <i className="feather-zap text-success display1-size me-2 ms-0" />
-              <span
-                className="
+            <Link href="/feed">
+              <a>
+                <i className="feather-zap text-success display1-size me-2 ms-0" />
+                <span
+                  className="
               d-inline-block
               fredoka-font
               ls-3
@@ -54,10 +76,11 @@ const MainLayout = ({ children }: IProps) => {
               logo-text
               mb-0
             "
-              >
-                Sociala.
-              </span>
-            </a>
+                >
+                  Sociala.
+                </span>
+              </a>
+            </Link>
             <a href="/" className="mob-menu ms-auto me-2 chat-active-btn">
               <i
                 className="
@@ -149,7 +172,9 @@ const MainLayout = ({ children }: IProps) => {
             aria-expanded="false"
           >
             <div className="p-2 text-center ms-auto menu-icon cursor-pointer">
-              <span className="dot-count bg-warning" />
+              <span
+                className={`bg-warning ${state.hasNotification && "dot-count"}`}
+              />
               <i className="feather-bell font-xl text-current" />
             </div>
           </Link>
